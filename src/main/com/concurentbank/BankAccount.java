@@ -17,9 +17,13 @@ public class BankAccount {
 
     public void deposit(BankAccount account, long money) {
         account.getBalance().addAndGet(money);
+        System.out.println(Thread.currentThread().getId());
+        System.out.println("На счет " + account + " положили: " + money);
     }
 
     public void withdraw(BankAccount account, long money) {
         account.getBalance().addAndGet(- money);
+        System.out.println(Thread.currentThread().getId());
+        System.out.println("Со счета: " + account + " списали: " + money);
     }
 }

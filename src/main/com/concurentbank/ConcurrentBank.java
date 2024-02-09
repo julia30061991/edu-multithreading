@@ -22,13 +22,17 @@ public class ConcurrentBank {
     }
 
     public synchronized void transfer(BankAccount account1, BankAccount account2, AtomicLong money) {
-        if (account1.getBalance().longValue() >= money.longValue()) {
-            account1.withdraw(account1, money.longValue());
-            System.out.println("Списана сумма: " + money);
-            account2.deposit(account2, money.longValue());
-            System.out.println("Зачислена сумма: " + money);
-        } else {
-            System.out.println("На счету недостаточно средств для перевода");
+        synchronized (account1) {
+            synchronized (account2) {
+                if (account1.getBalance().longValue() >= money.longValue()) {
+                    account1.withdraw(account1, money.longValue());
+                    System.out.println("Счет: " + account1 + ", списано: " + money);
+                    account2.deposit(account2, money.longValue());
+                    System.out.println("Счет: " + account2 + ", зачислено: " + money);
+                } else {
+                    System.out.println("На счету недостаточно средств для перевода");
+                }
+            }
         }
     }
 
